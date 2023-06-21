@@ -1,0 +1,13 @@
+- name: Create standard hdd storage class
+  kubernetes.core.k8s:
+    state: present
+    definition:
+      kind: StorageClass
+      apiVersion: storage.k8s.io/v1
+      metadata:
+        name: sc-hostpath-hdd
+      provisioner: "{{var_provisioner}}/hostpath"
+      reclaimPolicy: Delete
+      parameters:
+        pvDir: /opt/sc-hostpath-hdd
+      volumeBindingMode: WaitForFirstConsumer

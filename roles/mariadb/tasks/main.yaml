@@ -1,0 +1,27 @@
+- name: Add bitnami chart repo
+  kubernetes.core.helm_repository:
+    name: bitnami
+    repo_url: "https://charts.bitnami.com/bitnami"
+
+- name: Deploy mariadb
+  kubernetes.core.helm:
+    name: mariadb
+    chart_ref: bitnami/mariadb
+    create_namespace: true
+    release_namespace: wordpress
+    # state: absent
+    state: present
+    values:
+      persistence:
+        enabled: true
+        storageClass: sc-hostpath
+      auth:
+        rootPassword: "{{var_rnd_password}}"
+        database: wordpress
+        username: wordpress
+        password: "{{var_rnd_password}}"
+      primary:
+        service:
+          type: NodePort
+          nodePorts:
+            mysql: 30306

@@ -1,0 +1,110 @@
+- name: Add minio chart repo
+  kubernetes.core.helm_repository:
+    name: minio
+    repo_url: "https://charts.min.io"
+
+- name: Deploy minio
+  kubernetes.core.helm:
+    name: minio
+    chart_ref: minio/minio
+    create_namespace: true
+    release_namespace: velero
+    # state: absent
+    state: present
+    values:
+      mode: standalone
+      rootUser: rootuser
+      rootPassword: "{{var_rnd_password}}"
+      persistence:
+        storageClass: sc-hostpath-hdd
+        size: 64Gi
+      replicas: 1
+      resources:
+        requests:
+          memory: 372Mi
+
+- name: Search minio Pod
+  kubernetes.core.k8s_info:
+    kind: Pod
+    namespace: velero
+    label_selectors:
+      - app = minio
+  register: info_minio_app
+
+- name: Gunzip mc
+  changed_when: false
+  kubernetes.core.k8s_exec:
+    namespace: velero
+    pod: "{{info_minio_app.resources[0].metadata.name}}"
+    command: bash -c 'gunzip -f -c /opt/bin/mc.gz > /tmp/mc; chmod a+x /tmp/mc'
+
+- name: Create alias
+  changed_when: false
+  kubernetes.core.k8s_exec:
+    namespace: velero
+    pod: "{{info_minio_app.resources[0].metadata.name}}"
+    command: "/tmp/mc --config-dir /tmp alias set aliasminio http://localhost:9000 rootuser {{var_rnd_password}}"
+
+- name: Create bucket
+  block:
+    - name: Create bucket Check
+      failed_when: false
+      changed_when: false
+      kubernetes.core.k8s_exec:
+        namespace: velero
+        pod: "{{info_minio_app.resources[0].metadata.name}}"
+        command: /tmp/mc --config-dir /tmp ls aliasminio/velero
+      register: command_status
+    - name: Create bucket Mb
+      kubernetes.core.k8s_exec:
+        namespace: velero
+        pod: "{{info_minio_app.resources[0].metadata.name}}"
+        command: /tmp/mc --config-dir /tmp mb aliasminio/velero
+      when: command_status.rc != 0
+
+- name: Create user
+  block:
+    - name: Create user Check
+      failed_when: false
+      changed_when: false
+      kubernetes.core.k8s_exec:
+        namespace: velero
+        pod: "{{info_minio_app.resources[0].metadata.name}}"
+        command: /tmp/mc --config-dir /tmp admin user info aliasminio velero
+      register: command_status
+    - name: Create user Create
+      kubernetes.core.k8s_exec:
+        namespace: velero
+        pod: "{{info_minio_app.resources[0].metadata.name}}"
+        command: "/tmp/mc --config-dir /tmp admin user add aliasminio velero {{var_rnd_password}}"
+      when: command_status.rc != 0
+
+- name: Create policy
+  block:
+    - name: Create policy Check
+      failed_when: false
+      changed_when: false
+      kubernetes.core.k8s_exec:
+        namespace: velero
+        pod: "{{info_minio_app.resources[0].metadata.name}}"
+        command: /tmp/mc --config-dir /tmp admin policy info aliasminio readwrite-velero
+      register: command_status
+    - name: Create policy Copy
+      kubernetes.core.k8s_cp:
+        namespace: velero
+        pod: "{{info_minio_app.resources[0].metadata.name}}"
+        remote_path: /tmp/readwrite-velero.json
+        local_path: "{{playbook_dir}}/roles/minio/files/readwrite-velero.json"
+      when: command_status.rc != 0
+    - name: Create policy Create
+      kubernetes.core.k8s_exec:
+        namespace: velero
+        pod: "{{info_minio_app.resources[0].metadata.name}}"
+        command: /tmp/mc --config-dir /tmp admin policy create aliasminio readwrite-velero /tmp/readwrite-velero.json
+      when: command_status.rc != 0
+    - name: Create policy Attach
+      kubernetes.core.k8s_exec:
+        namespace: velero
+        pod: "{{info_minio_app.resources[0].metadata.name}}"
+        command: /tmp/mc --config-dir /tmp admin policy attach aliasminio readwrite-velero --user velero
+      when: command_status.rc != 0

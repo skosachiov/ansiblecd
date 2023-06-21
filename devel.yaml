@@ -1,0 +1,15 @@
+---
+
+- hosts: localhost
+
+  pre_tasks:
+    - include_tasks: roles/pre-tasks/tasks/main.yaml
+      tags: always
+
+  roles:
+    - role: storage
+    - role: mariadb
+    - role: wordpress
+    - role: velero
+    - role: minio
+    - role: ingress

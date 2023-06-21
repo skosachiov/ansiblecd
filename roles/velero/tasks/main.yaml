@@ -1,0 +1,34 @@
+- name: Add minio velero repo
+  kubernetes.core.helm_repository:
+    name: vmware-tanzu
+    repo_url: "https://vmware-tanzu.github.io/helm-charts"
+
+- name: Deploy velero
+  kubernetes.core.helm:
+    name: velero
+    chart_ref: vmware-tanzu/velero
+    create_namespace: true
+    release_namespace: velero
+    # state: absent
+    state: present
+    values:
+      credentials:
+        useSecret: true
+        secretContents:
+          cloud: |
+            [default]
+            aws_access_key_id=velero
+            aws_secret_access_key={{var_rnd_password}}
+      configuration:
+        snapshotsEnabled: false
+        cleanUpCRDs: true
+        backupStorageLocation:
+          - name: "{{var_minio_devel if ansible_env.K8S_AUTH_CONTEXT == 'prod' else var_minio_prod}}"
+            bucket: velero
+            provider: aws
+            plugins: velero/velero-plugin-for-aws
+            config:
+              region: minio
+              s3ForcePathStyle: true
+              s3Url: https://{{var_minio_devel if ansible_env.K8S_AUTH_CONTEXT == 'prod' else var_minio_prod}}.{{var_domain}}
+

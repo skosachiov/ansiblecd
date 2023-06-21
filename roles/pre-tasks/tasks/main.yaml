@@ -1,0 +1,7 @@
+- name: Include common vars
+  include_vars:
+    dir: "{{playbook_dir}}/inventories/all/vars"
+
+- name: Include clusters vars
+  include_vars:
+    dir: "{{playbook_dir}}/inventories/env/{{ansible_env.K8S_AUTH_CONTEXT}}/vars"

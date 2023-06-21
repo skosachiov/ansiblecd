@@ -1,0 +1,2 @@
+var_cluster_ip: 31.28.11.61
+var_cluster_fqdn: "cluster-prod.{{var_domain}}"

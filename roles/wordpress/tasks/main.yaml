@@ -1,0 +1,39 @@
+- name: Add bitnami chart repo
+  kubernetes.core.helm_repository:
+    name: bitnami
+    repo_url: "https://charts.bitnami.com/bitnami"
+
+- name: Set devel
+  set_fact:
+    mariadb_host: mariadb.wordpress.svc.cluster.local
+    mariadb_port: 3306
+  when: ansible_env.K8S_AUTH_CONTEXT == 'devel'
+
+- name: Set prod
+  set_fact:
+    mariadb_host: "{{var_mariadb_prod + '.' + var_domain}}"
+    mariadb_port: 30306
+  when: ansible_env.K8S_AUTH_CONTEXT != 'devel'
+
+- name: Deploy wordpress
+  kubernetes.core.helm:
+    name: wordpress
+    chart_ref: bitnami/wordpress
+    create_namespace: true
+    release_namespace: wordpress
+    # state: absent
+    state: present
+    values:
+      image:
+        debug: true
+      storageClass: sc-hostpath
+      wordpressUsername: admin
+      wordpressPassword: "{{var_wordpress_password}}"
+      mariadb:
+        enabled: false
+      externalDatabase:
+        host: "{{mariadb_host}}"
+        user: wordpress
+        password: "{{var_rnd_password}}"
+        database: wordpress
+        port: "{{mariadb_port}}"
