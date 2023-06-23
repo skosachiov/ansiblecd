@@ -20,7 +20,7 @@ Steps to reproduce:
 - ansible-vault encrypt --vault-id ansible-k8s-example@prompt config.yml (you will share this file with other collaborators)
 - git add config.yaml
 - edit github *secrets*, ANSIBLE_VAULT_PASSWORD=secret (this vault decryption secret is not available to non-collaborators)
-- edit github *variables*, CONTEXT_DEVEL=devel, CONTEXT_PROD=prod, DOMAIN=domain.org (these variables will rewrite some of the variables in inventories)
+- edit github *variables*, CONTEXT_DEVEL=devel, CONTEXT_PROD=prod (these variables will rewrite some of the variables in inventories)
 - make any commit to main branch (prod context) or run gh action
 - make commit to devel branch (devel context) branch from browser
 

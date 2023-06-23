@@ -3,8 +3,6 @@ name: ansiblecd
 on:
   push:
     branches: [main, devel]
-  pull_request:
-    branches: [main, devel]
 
 jobs:
 
@@ -13,5 +11,5 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v3
-      - run: sudo apt -y install ansible
-      - run: ansible-playbook -b --check --connection=local -i 127.0.0.1, workstation.yml
+      - run: sudo apt -y install ansible python3-kubernetes
+      - run: KUBECONFIG=config.yaml ansible-playbook devel.yaml
