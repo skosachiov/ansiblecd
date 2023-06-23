@@ -6,10 +6,13 @@ on:
 
 jobs:
 
-  test:
+  deploy_devel:
     runs-on: ubuntu-latest
+    env:
+      KUBECONFIG: config.yaml
+      K8S_AUTH_CONTEXT: devel
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v3
       - run: sudo apt -y install ansible python3-kubernetes
-      - run: KUBECONFIG=config.yaml ansible-playbook devel.yaml
+      - run: ansible-playbook devel.yaml
