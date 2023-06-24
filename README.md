@@ -43,7 +43,13 @@ Steps to reproduce:
 - K8S_AUTH_CONTEXT=devel ansible-playbook --vault-pass-file .vault_pass devel.yaml (manually or git hooks)
 - K8S_AUTH_CONTEXT=prod ansible-playbook --vault-pass-file .vault_pass prod.yaml (manually or git hooks)
 
-## Roles
+## Example
+
+### Diagram
+
+![diagram](./ansiblecd.png)
+
+### Roles
 
     - storage
     - mariadb
@@ -52,6 +58,6 @@ Steps to reproduce:
     - minio
     - ingress
 
-## Tests
+### Tests
 
     - get url
