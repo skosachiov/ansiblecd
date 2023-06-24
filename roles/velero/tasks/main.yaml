@@ -30,5 +30,5 @@
             config:
               region: minio
               s3ForcePathStyle: true
-              s3Url: https://{{var_minio_devel if ansible_env.K8S_AUTH_CONTEXT == 'prod' else var_minio_prod}}.{{var_domain}}
+              s3Url: "https://{{var_minio_devel if ansible_env.K8S_AUTH_CONTEXT == 'prod' else var_minio_prod}}.{{var_domain}}"
 
