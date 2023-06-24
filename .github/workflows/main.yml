@@ -9,7 +9,7 @@ jobs:
   deploy_devel:
     runs-on: ubuntu-latest
     env:
-      K8S_AUTH_KUBECONFIG: config.yaml
+      KUBECONFIG: config.yaml
       K8S_AUTH_CONTEXT: devel
     timeout-minutes: 5
     steps:
