@@ -2,7 +2,7 @@
 
 [![ansiblecd](https://github.com/skosachiov/ansiblecd/actions/workflows/main.yml/badge.svg)](https://github.com/skosachiov/ansiblecd/actions/workflows/main.yml)
 
-This project illustrates the GitOps approach for managing kubernetes clusters using only Ansible *instead of FluxCD or ArgoCD*. A commit to the devel git branch automatically rolls out changes to the devel environment, a commit (merge from devel) to the prod branch makes changes to the prod environment. Commit to production can happen automatically after automatic testing of the devel environment.
+This project illustrates the GitOps approach for managing kubernetes clusters using only Ansible *instead of FluxCD or ArgoCD*. A commit to the devel git branch automatically rolls out changes to the devel environment, a commit (merge from devel) to the prod branch makes changes to the prod environment. Commit to production can happen automatically after automatic testing of the devel environment. Minor differences in the application of roles to development clusters and production clusters are implemented using the appropriate conditions.
 
 In this example, devel and prod environments are slightly different, which is of course undesirable for real work.
 
