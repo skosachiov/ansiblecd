@@ -1,0 +1,22 @@
+name: ansiblecd prod
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      KUBECONFIG: config.yaml
+      K8S_AUTH_CONTEXT: prod
+    steps:
+      - uses: actions/checkout@v3
+      - run: sudo apt -y install ansible python3-kubernetes
+      - run: /usr/bin/ansible-galaxy collection install kubernetes.core
+      - run: /usr/bin/ansible-playbook --version
+      - run: echo ${{ secrets.ANSIBLE_VAULT_PASSWORD }} > .vault_pass
+      - run: /usr/bin/ansible-vault decrypt --vault-pass-file .vault_pass config.yaml
+      - run: /usr/bin/ansible-playbook --vault-pass-file .vault_pass devel.yaml

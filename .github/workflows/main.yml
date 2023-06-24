@@ -1,8 +1,8 @@
-name: ansiblecd
+name: ansiblecd devel
 
 on:
   push:
-    branches: [main, devel]
+    branches: [devel]
 
 jobs:
 
