@@ -17,4 +17,4 @@ jobs:
       - run: sudo apt -y install ansible python3-kubernetes
       - run: /usr/bin/ansible-galaxy collection install kubernetes.core
       - run: /usr/bin/ansible-playbook --version
-      - run: /usr/bin/ansible-playbook devel.yaml
+      - run: /usr/bin/ansible-playbook -vvv devel.yaml
