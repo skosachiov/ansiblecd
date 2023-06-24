@@ -21,6 +21,9 @@
             aws_secret_access_key={{var_rnd_password}}
       configuration:
         snapshotsEnabled: false
+        volumeSnapshotLocation:
+          - name: dummy
+            provider: aws
         cleanUpCRDs: true
         backupStorageLocation:
           - name: "{{var_minio_devel if ansible_env.K8S_AUTH_CONTEXT == 'prod' else var_minio_prod}}"
