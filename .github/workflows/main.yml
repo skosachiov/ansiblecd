@@ -18,4 +18,5 @@ jobs:
       - run: /usr/bin/ansible-galaxy collection install kubernetes.core
       - run: /usr/bin/ansible-playbook --version
       - run: echo ${{ secrets.ANSIBLE_VAULT_PASSWORD }} > .vault_pass
+      - run: /usr/bin/ansible-vault decrypt --vault-pass-file .vault_pass config.yaml
       - run: /usr/bin/ansible-playbook -vvv --vault-pass-file .vault_pass devel.yaml
