@@ -59,8 +59,9 @@ The attached example deploys almost identical sets for running and backing up th
     - velero
     - minio
     - ingress
+    - test
 
-### Automated tests
+### Automated test role
 
     - get wordpress url
     - check s3 (TODO)

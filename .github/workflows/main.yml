@@ -6,12 +6,12 @@ on:
 
 jobs:
 
-  deploy_devel:
+  deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     env:
       KUBECONFIG: config.yaml
       K8S_AUTH_CONTEXT: devel
-    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v3
       - run: sudo apt -y install ansible python3-kubernetes
@@ -20,3 +20,4 @@ jobs:
       - run: echo ${{ secrets.ANSIBLE_VAULT_PASSWORD }} > .vault_pass
       - run: /usr/bin/ansible-vault decrypt --vault-pass-file .vault_pass config.yaml
       - run: /usr/bin/ansible-playbook --vault-pass-file .vault_pass devel.yaml
+

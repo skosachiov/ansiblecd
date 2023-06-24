@@ -13,3 +13,4 @@
     - role: velero
     - role: minio
     - role: ingress
+    - role: test
