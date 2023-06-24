@@ -20,10 +20,10 @@ Steps to reproduce:
 
 - **fork** the project on github
 - git clone repo
-- cp ~/.kube/config.yml ./config.yaml
-- echo "secret" > .vault_pass
-- ansible-vault encrypt --vault-pass-file .vault_pass config.yaml (you will share this file with other collaborators)
-- git add config.yaml
+- `cp ~/.kube/config.yml ./config.yaml`
+- `echo "secret" > .vault_pass`
+- `ansible-vault encrypt --vault-pass-file .vault_pass config.yaml` (you will share this file with other collaborators)
+- `git add config.yaml`
 - edit github *secrets*, ANSIBLE_VAULT_PASSWORD=secret (this vault decryption secret is not available to non-collaborators)
 - edit github *variables*, CONTEXT_DEVEL=devel, CONTEXT_PROD=prod (these variables will rewrite some of the variables in inventories)
 - make any commit to main branch (prod context) or run gh action
@@ -38,12 +38,12 @@ Steps to reproduce:
 Steps to reproduce:
 
 - **clone** github project
-- echo 'my_vault_password' > .vault_pass
-- echo '.vault_pass' >> .gitignore
+- `echo 'my_vault_password' > .vault_pass`
+- `echo '.vault_pass' >> .gitignore`
 - set auto git push on commit via git hooks
 - edit inventories/all/vars/main.yalm (use: ansible-vault encrypt_string --vault-password-file .vault_pass 'my_secret' --name 'var_rnd_password')
-- K8S_AUTH_CONTEXT=devel ansible-playbook --vault-pass-file .vault_pass devel.yaml (manually or git hooks)
-- K8S_AUTH_CONTEXT=prod ansible-playbook --vault-pass-file .vault_pass prod.yaml (manually or git hooks)
+- `K8S_AUTH_CONTEXT=devel ansible-playbook --vault-pass-file .vault_pass devel.yaml (manually or git hooks)`
+- `K8S_AUTH_CONTEXT=prod ansible-playbook --vault-pass-file .vault_pass prod.yaml (manually or git hooks)`
 
 ## Attached example
 
