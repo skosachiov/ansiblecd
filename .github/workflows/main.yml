@@ -14,5 +14,5 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v3
-      - run: sudo apt -y install ansible python3-kubernetes
+      - run: sudo apt -y install ansible python3-kubernetes kubernetes-client
       - run: ansible-playbook devel.yaml
