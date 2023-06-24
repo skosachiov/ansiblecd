@@ -17,5 +17,5 @@ jobs:
       - run: sudo apt -y install ansible python3-kubernetes
       - run: /usr/bin/ansible-galaxy collection install kubernetes.core
       - run: /usr/bin/ansible-playbook --version
-      - run: echo echo ${{ secrets.ANSIBLE_VAULT_PASSWORD }} > .vault_pass
+      - run: echo ${{ secrets.ANSIBLE_VAULT_PASSWORD }} > .vault_pass
       - run: /usr/bin/ansible-playbook -vvv --vault-pass-file .vault_pass devel.yaml
