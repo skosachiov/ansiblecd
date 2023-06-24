@@ -1,0 +1,6 @@
+- name: Get url
+  changed_when: false
+  get_url:
+    url: "https://{{var_wordpress_hostname}}.{{var_domain}}:8443"
+    dest: /tmp/index.html
+    validate_certs: false
