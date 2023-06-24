@@ -16,8 +16,8 @@ Steps to reproduce:
 
 - **fork** the project on github
 - git clone repo
-- copy ~/.kube/config.yaml .
-- ansible-vault encrypt --vault-id ansible-k8s-example@prompt config.yml (you will share this file with other collaborators)
+- cp ~/.kube/config.yml ./config.yaml
+- ansible-vault encrypt --vault-id ansiblecd@prompt config.yaml (you will share this file with other collaborators)
 - git add config.yaml
 - edit github *secrets*, ANSIBLE_VAULT_PASSWORD=secret (this vault decryption secret is not available to non-collaborators)
 - edit github *variables*, CONTEXT_DEVEL=devel, CONTEXT_PROD=prod (these variables will rewrite some of the variables in inventories)
