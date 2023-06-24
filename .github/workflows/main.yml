@@ -1,23 +1,35 @@
-name: ansiblecd prod
+name: ansiblecd devel
 
 on:
   push:
-    branches: [main]
+    branches: [devel, main]
 
 jobs:
 
   deploy:
     runs-on: ubuntu-latest
     timeout-minutes: 5
+
     env:
       KUBECONFIG: config.yaml
-      K8S_AUTH_CONTEXT: prod
     steps:
+
+      - name: Sets env vars for devel
+        run: |
+          echo "K8S_AUTH_CONTEXT=devel" >> $GITHUB_ENV
+        if: ${{ github.ref == 'refs/heads/devel' }}
+
+      - name: Sets env vars for prod
+        run: |
+          echo "K8S_AUTH_CONTEXT=prod" >> $GITHUB_ENV
+        if: ${{ github.ref == 'refs/heads/main' }}
+
       - uses: actions/checkout@v3
       - run: sudo apt -y install ansible python3-kubernetes
       - run: /usr/bin/ansible-galaxy collection install kubernetes.core
       - run: /usr/bin/ansible-playbook --version
       - run: echo ${{ secrets.ANSIBLE_VAULT_PASSWORD }} > .vault_pass
       - run: /usr/bin/ansible-vault decrypt --vault-pass-file .vault_pass config.yaml
-      - run: /usr/bin/ansible-playbook --vault-pass-file .vault_pass devel.yaml
+      - run: /usr/bin/ansible-playbook --vault-pass-file .vault_pass ${{env.K8S_AUTH_CONTEXT}}.yaml
+
 
