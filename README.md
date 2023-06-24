@@ -43,7 +43,9 @@ Steps to reproduce:
 - K8S_AUTH_CONTEXT=devel ansible-playbook --vault-pass-file .vault_pass devel.yaml (manually or git hooks)
 - K8S_AUTH_CONTEXT=prod ansible-playbook --vault-pass-file .vault_pass prod.yaml (manually or git hooks)
 
-## Example
+## Attached example
+
+The attached example deploys almost identical sets for running and backing up the WordPress system on two clusters. A commit to devel initiates changes on the devel cluster and automated tests. After that, the developer decides to merge into the master, which makes changes to the productive cluster with similar subsequent checks.
 
 ### Diagram
 
@@ -58,6 +60,8 @@ Steps to reproduce:
     - minio
     - ingress
 
-### Tests
+### Automated tests
 
-    - get url
+    - get wordpress url
+    - check s3 (TODO)
+    - check backup (TODO)

@@ -1,7 +1,7 @@
 - name: Create common ingress
   kubernetes.core.k8s:
-    state: present
-    # state: absent
+    # state: present
+    state: absent
     definition:
       apiVersion: networking.k8s.io/v1
       kind: Ingress
