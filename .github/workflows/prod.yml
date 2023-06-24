@@ -1,4 +1,4 @@
-name: ansiblecd devel
+name: ansiblecd prod
 
 on:
   push:
