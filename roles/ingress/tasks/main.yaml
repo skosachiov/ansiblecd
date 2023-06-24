@@ -20,6 +20,16 @@
                     name: wordpress
                     port:
                       number: 80
+          - host: "{{var_cluster_fqdn}}"
+            http:
+              paths:
+              - pathType: Prefix
+                path: "/"
+                backend:
+                  service:
+                    name: wordpress
+                    port:
+                      number: 80
         ports:
           - name: mariadb
             port: 3306
