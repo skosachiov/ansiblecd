@@ -15,5 +15,5 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: sudo apt -y install ansible python3-kubernetes
-      - run: pip install kubernetes-client
+      - run: pip install kubernetes
       - run: ansible-playbook devel.yaml
