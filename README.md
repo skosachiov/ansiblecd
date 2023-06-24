@@ -53,16 +53,16 @@ The attached example deploys almost identical sets for running and backing up th
 
 ### Roles
 
-    - storage
-    - mariadb
-    - wordpress
-    - velero
-    - minio
-    - ingress
-    - test
+- storage
+- mariadb
+- wordpress
+- velero
+- minio
+- ingress
+- test
 
 ### Automated test role
 
-    - get wordpress url
-    - check s3 (TODO)
-    - check backup (TODO)
+- get wordpress url
+- check s3 (TODO)
+- check backup (TODO)
