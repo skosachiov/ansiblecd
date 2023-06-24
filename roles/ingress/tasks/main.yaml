@@ -7,7 +7,7 @@
       kind: Ingress
       metadata:
         name: http-ingress
-        namespace: ingress
+        namespace: wordpress
       spec:
         rules:
           - host: "{{var_wordpress_hostname}}.{{var_domain}}"
@@ -20,6 +20,24 @@
                     name: wordpress
                     port:
                       number: 80
+        ports:
+          - name: mariadb
+            port: 3306
+            targetPort: 3306
+            protocol: TCP
+
+- name: Create common ingress
+  kubernetes.core.k8s:
+    state: present
+    # state: absent
+    definition:
+      apiVersion: networking.k8s.io/v1
+      kind: Ingress
+      metadata:
+        name: http-ingress
+        namespace: velero
+      spec:
+        rules:
           - host: "{{var_minio_devel if ansible_env.K8S_AUTH_CONTEXT == 'devel' else var_minio_prod}}.{{var_domain}}"
             http:
               paths:
@@ -30,8 +48,3 @@
                     name: minio
                     port:
                       number: 9000
-        ports:
-          - name: mariadb
-            port: 3306
-            targetPort: 3306
-            protocol: TCP
