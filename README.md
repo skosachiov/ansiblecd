@@ -6,9 +6,9 @@ This project illustrates the GitOps approach for managing kubernetes clusters us
 
 In this example, devel and prod environments are slightly different, which is of course undesirable for real work.
 
-## Staging
+## Two options for working in GitOps mode
 
-### Linux/MacOS/Windows/AndroidTV/etc workstation and Github Actions
+### 1. Linux/MacOS/Windows/AndroidTV/etc workstation and Github Actions
 
 - Ansible and gh actions as GitOps continuous delivery tool for Kubernetes
 - Need to have two kubernetes clusters microk8s/minikube/k3s or GKE/EKS/AKS
@@ -27,7 +27,7 @@ Steps to reproduce:
 - make any commit to main branch (prod context) or run gh action
 - make commit to devel branch (devel context) branch from browser
 
-### Linux workstation only
+### 2. Linux workstation only
 
 - Need to have two kubernetes clusters microk8s/minikube/k3s or GKE/EKS/AKS
 - All team members (collaborators) must complete the clusters authentication setup
