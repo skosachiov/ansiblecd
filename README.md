@@ -4,7 +4,7 @@
 
 This project illustrates the GitOps approach for managing kubernetes clusters using only Ansible *instead of FluxCD or ArgoCD*. A commit to the devel git branch automatically rolls out changes to the devel environment, a commit (merge from devel) to the prod branch makes changes to the prod environment. Commit to production can happen automatically after automatic testing of the devel environment. Minor differences in the application of roles to development clusters and production clusters are implemented using the appropriate conditions.
 
-In this example, devel and prod environments are slightly different, which is of course undesirable for real work.
+In this example, devel and prod environments are slightly different, which is of course undesirable for real work. And of course, don't use the same password for different services.
 
 ## Two options for working in GitOps mode
 
@@ -19,7 +19,7 @@ Steps to reproduce:
 - **fork** the project on github
 - git clone repo
 - `cp ~/.kube/config.yml ./config.yaml`
-- `echo "secret" > .vault_pass`
+- `echo 'secret' > .vault_pass`
 - `ansible-vault encrypt --vault-pass-file .vault_pass config.yaml` (you will share this file with other collaborators)
 - `git add config.yaml`
 - edit github *secrets*, ANSIBLE_VAULT_PASSWORD=secret (this vault decryption secret is not available to non-collaborators)
@@ -36,7 +36,7 @@ Steps to reproduce:
 Steps to reproduce:
 
 - **clone** github project
-- `echo 'my_vault_password' > .vault_pass`
+- `echo 'secert' > .vault_pass`
 - `echo '.vault_pass' >> .gitignore`
 - set auto git push on commit via git hooks
 - edit inventories/all/vars/main.yalm (use: ansible-vault encrypt_string --vault-password-file .vault_pass 'my_secret' --name 'var_rnd_password')
