@@ -66,3 +66,35 @@ The attached example deploys almost identical sets for running and backing up th
 - get wordpress url
 - check s3 (TODO)
 - check backup (TODO)
+
+## Usefull commands for a quick start with microk8s
+
+Install microk8s on Ubuntu server (devel and prod):
+https://ubuntu.com/tutorials/install-a-local-kubernetes-with-microk8s
+
+Get cluster configs:
+`ssh user@cluster-devel sudo microk8s kubectl config view --raw=true >> ~/.kube/config-devel.yaml`
+`ssh user@cluster-prod sudo microk8s kubectl config view --raw=true >> ~/.kube/config-prod.yaml`
+
+Edit configs:
+TODO
+`sed -i 's/.../.../g' ~/.kube/config-devel.yaml`
+`sed -i 's/.../.../g' ~/.kube/config-prod.yaml`
+
+Connect all kube configurations:
+`echo 'export KUBECONFIG=$KUBECONFIG:$HOME/.kube/config-devel.yaml:$HOME/.kube/config-prod.yaml' >> ~/.bashrc`
+
+Completion bash:
+`echo 'source <(kubectl completion bash)' >> ~/.bashrc`
+
+Git lifecycle:
+`git checkout devel`
+`git commit --allow-empty -m "trigger action"`
+`git push`
+`git checkout main`
+`git merge main`
+`git push`
+
+Reset cluster:
+`sudo microk8s reset --destroy-storage`
+
