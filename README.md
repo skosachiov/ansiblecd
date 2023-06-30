@@ -74,30 +74,30 @@ Install microk8s on Ubuntu server (devel and prod):
 https://ubuntu.com/tutorials/install-a-local-kubernetes-with-microk8s
 
 Get cluster configs:
-`ssh user@cluster-devel sudo microk8s kubectl config view --raw=true >> /.kube/config-devel`
-`ssh user@cluster-prod sudo microk8s kubectl config view --raw=true >> ~/.kube/config-prod`
+- `ssh user@cluster-devel sudo microk8s kubectl config view --raw=true >> /.kube/config-devel`
+- `ssh user@cluster-prod sudo microk8s kubectl config view --raw=true >> ~/.kube/config-prod`
 
 Edit configs:
-`sed -i 's/127.0.0.1/188.243.216.196/g;s/microk8s-cluster/devel/g;s/microk8s/devel/g;s/admin/admin-devel/g' ~/.kube/config-devel`
-`   `
+- `sed -i 's/127.0.0.1/188.243.216.196/g;s/microk8s-cluster/devel/g;s/microk8s/devel/g;s/admin/admin-devel/g' ~/.kube/config-devel`
+- `sed -i 's/127.0.0.1/31.28.11.61/g;s/microk8s-cluster/prod/g;s/microk8s/prod/g;s/admin/admin-prod/g' ~/.kube/config-prod`
 
 Connect all kube cluster configurations:
-`KUBECONFIG=$HOME/.kube/config-devel:$HOME/.kube/config-prod kubectl config view --flatten > ~/.kube/config`
+- `KUBECONFIG=$HOME/.kube/config-devel:$HOME/.kube/config-prod kubectl config view --flatten > ~/.kube/config`
 
 Check:
-`kubectl config get-contexts`
+- `kubectl config get-contexts`
 
 Completion bash:
-`echo 'source <(kubectl completion bash)' >> ~/.bashrc`
+- `echo 'source <(kubectl completion bash)' >> ~/.bashrc`
 
 Git lifecycle:
-`git checkout devel`
-`git commit --allow-empty -m "trigger action"`
-`git push`
-`git checkout main`
-`git merge main`
-`git push`
+- `git checkout devel`
+- `git commit --allow-empty -m "trigger action"`
+- `git push`
+- `git checkout main`
+- `git merge main`
+- `git push`
 
 Reset cluster:
-`sudo microk8s reset --destroy-storage`
+- `sudo microk8s reset --destroy-storage`
 
