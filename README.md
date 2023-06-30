@@ -17,11 +17,12 @@ In this example, devel and prod environments are slightly different, which is of
 Steps to reproduce:
 
 - **fork** the project on github
-- git clone repo
-- `cp ~/.kube/config.yml ./config.yaml`
+- `git clone git@github.com:yourname/ansiblecd`
+- `cd ansiblecd`
+- `cp ~/.kube/config-* .` (assumed that your cluster configs are called config-devel ans config-prod)
 - `echo 'secret' > .vault_pass`
-- `ansible-vault encrypt --vault-pass-file .vault_pass config.yaml` (you will share this file with other collaborators)
-- `git add config.yaml`
+- `ansible-vault encrypt --vault-pass-file .vault_pass config-devel config-prod` (you will share this file with other collaborators)
+- `git add config-devel config-prod`
 - edit github *secrets*, ANSIBLE_VAULT_PASSWORD=secret (this vault decryption secret is not available to non-collaborators)
 - edit github *variables*, CONTEXT_DEVEL=devel, CONTEXT_PROD=prod (these variables will rewrite some of the variables in inventories)
 - make any commit to main branch (prod context) or run gh action
@@ -73,16 +74,16 @@ Install microk8s on Ubuntu server (devel and prod):
 https://ubuntu.com/tutorials/install-a-local-kubernetes-with-microk8s
 
 Get cluster configs:
-`ssh user@cluster-devel sudo microk8s kubectl config view --raw=true >> ~/.kube/config-devel.yaml`
-`ssh user@cluster-prod sudo microk8s kubectl config view --raw=true >> ~/.kube/config-prod.yaml`
+`ssh user@cluster-devel sudo microk8s kubectl config view --raw=true >> ~/.kube/config-devel`
+`ssh user@cluster-prod sudo microk8s kubectl config view --raw=true >> ~/.kube/config-prod`
 
 Edit configs:
 TODO
-`sed -i 's/.../.../g' ~/.kube/config-devel.yaml`
-`sed -i 's/.../.../g' ~/.kube/config-prod.yaml`
+`sed -i 's/127.0.0.1/.../g' 's/microk8s-cluster/devel/g' 's/microk8s/devel/g' 's/admin/admin-devel/g' ~/.kube/config-devel`
+`sed -i 's/.../.../g' ~/.kube/config-prod`
 
 Connect all kube configurations:
-`echo 'export KUBECONFIG=$KUBECONFIG:$HOME/.kube/config-devel.yaml:$HOME/.kube/config-prod.yaml' >> ~/.bashrc`
+`echo 'export KUBECONFIG=$KUBECONFIG:$HOME/.kube/config-devel:$HOME/.kube/config-prod' >> ~/.bashrc`
 
 Completion bash:
 `echo 'source <(kubectl completion bash)' >> ~/.bashrc`
