@@ -84,8 +84,10 @@ Edit configs:
 
 Merge all kubeconfig:
 - `KUBECONFIG=~/.kube/config-devel:~/.kube/config-prod kubectl config view --flatten > ~/.kube/config`
+- `chmod go-rwx ~/.kube/config; rm -f ~/.kube/config-devel ~/.kube/config-prod`
 
 Check:
+- `kubectl config use-context devel`
 - `kubectl config get-contexts`
 
 Completion bash:
@@ -101,4 +103,3 @@ Git lifecycle:
 
 Reset cluster:
 - `sudo microk8s reset --destroy-storage`
-
