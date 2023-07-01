@@ -1,6 +1,7 @@
 # AnsibleCD
 
-[![ansiblecd](https://github.com/skosachiov/ansiblecd/actions/workflows/main.yml/badge.svg)](https://github.com/skosachiov/ansiblecd/actions/workflows/main.yml)
+[![ansiblecd devel](https://github.com/skosachiov/ansiblecd/actions/workflows/main.yml/badge.svg?branch=devel)]
+[![ansiblecd main](https://github.com/skosachiov/ansiblecd/actions/workflows/main.yml/badge.svg?branch=main)]
 
 This project illustrates the GitOps approach for managing kubernetes clusters using only Ansible *instead of FluxCD or ArgoCD*. A commit to the devel git branch automatically rolls out changes to the devel environment, a commit (merge from devel) to the prod branch makes changes to the prod environment. Commit to production can happen automatically after automatic testing of the devel environment. Minor differences in the application of roles to development clusters and production clusters are implemented using the appropriate conditions.
 
@@ -81,8 +82,8 @@ Edit configs:
 - `sed -i 's/127.0.0.1/188.243.216.196/g;s/microk8s-cluster/devel/g;s/microk8s/devel/g;s/admin/admin-devel/g' ~/.kube/config-devel`
 - `sed -i 's/127.0.0.1/31.28.11.61/g;s/microk8s-cluster/prod/g;s/microk8s/prod/g;s/admin/admin-prod/g' ~/.kube/config-prod`
 
-Connect all kube cluster configurations:
-- `KUBECONFIG=$HOME/.kube/config-devel:$HOME/.kube/config-prod kubectl config view --flatten > ~/.kube/config`
+Merge all kubeconfig:
+- `KUBECONFIG=~/.kube/config-devel:~/.kube/config-prod kubectl config view --flatten > ~/.kube/config`
 
 Check:
 - `kubectl config get-contexts`

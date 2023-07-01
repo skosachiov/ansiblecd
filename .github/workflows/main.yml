@@ -12,6 +12,7 @@ jobs:
 
     env:
       KUBECONFIG: config
+
     steps:
 
       - name: Sets env vars for devel
