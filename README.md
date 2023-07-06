@@ -81,8 +81,8 @@ Get cluster configs:
 - `ssh user@cluster-prod sudo microk8s kubectl config view --raw=true >> ~/.kube/config-prod`
 
 Edit configs:
-- `sed -i 's/127.0.0.1/188.243.216.196/g;s/microk8s-cluster/devel/g;s/microk8s/devel/g;s/admin/admin-devel/g' ~/.kube/config-devel`
-- `sed -i 's/127.0.0.1/31.28.11.61/g;s/microk8s-cluster/prod/g;s/microk8s/prod/g;s/admin/admin-prod/g' ~/.kube/config-prod`
+- `sed -i 's/127.0.0.1/1.1.1.1/g;s/microk8s-cluster/devel/g;s/microk8s/devel/g;s/admin/admin-devel/g' ~/.kube/config-devel`
+- `sed -i 's/127.0.0.1/2.2.2.2/g;s/microk8s-cluster/prod/g;s/microk8s/prod/g;s/admin/admin-prod/g' ~/.kube/config-prod`
 
 Merge all kubeconfig:
 - `KUBECONFIG=~/.kube/config-devel:~/.kube/config-prod kubectl config view --flatten > ~/.kube/config`
