@@ -43,7 +43,7 @@
   kubernetes.core.k8s_exec:
     namespace: velero
     pod: "{{info_minio_app.resources[0].metadata.name}}"
-    command: "/tmp/mc --config-dir /tmp alias set aliasminio http://localhost:9000 rootuser {{var_rnd_password}}"
+    command: '/tmp/mc --config-dir /tmp alias set aliasminio http://localhost:9000 rootuser {{var_rnd_password}}'
 
 - name: Create bucket
   block:
