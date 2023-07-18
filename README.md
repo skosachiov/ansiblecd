@@ -77,7 +77,7 @@ Install microk8s on Ubuntu server (devel and prod):
 https://ubuntu.com/tutorials/install-a-local-kubernetes-with-microk8s
 
 Get cluster configs:
-- `ssh user@cluster-devel sudo microk8s kubectl config view --raw=true >> /.kube/config-devel`
+- `ssh user@cluster-devel sudo microk8s kubectl config view --raw=true >> ~/.kube/config-devel`
 - `ssh user@cluster-prod sudo microk8s kubectl config view --raw=true >> ~/.kube/config-prod`
 
 Edit configs:
