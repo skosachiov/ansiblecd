@@ -36,14 +36,14 @@
   kubernetes.core.k8s_exec:
     namespace: velero
     pod: "{{info_minio_app.resources[0].metadata.name}}"
-    command: bash -c 'gunzip -f -c /opt/bin/mc.gz > /tmp/mc; chmod a+x /tmp/mc'
+    command: bash -c "gunzip -f -c /opt/bin/mc.gz > /tmp/mc; chmod a+x /tmp/mc"
 
 - name: Create alias
   changed_when: false
   kubernetes.core.k8s_exec:
     namespace: velero
     pod: "{{info_minio_app.resources[0].metadata.name}}"
-    command: bash -c '/tmp/mc --config-dir /tmp alias set aliasminio http://localhost:9000 rootuser {{var_rnd_password}}'
+    command: bash -c "/tmp/mc --config-dir /tmp alias set aliasminio http://localhost:9000 rootuser {{var_rnd_password}}"
 
 - name: Create bucket
   block:
@@ -53,13 +53,13 @@
       kubernetes.core.k8s_exec:
         namespace: velero
         pod: "{{info_minio_app.resources[0].metadata.name}}"
-        command: /tmp/mc --config-dir /tmp ls aliasminio/velero
+        command: bash -c "/tmp/mc --config-dir /tmp ls aliasminio/velero"
       register: command_status
     - name: Create bucket Mb
       kubernetes.core.k8s_exec:
         namespace: velero
         pod: "{{info_minio_app.resources[0].metadata.name}}"
-        command: /tmp/mc --config-dir /tmp mb aliasminio/velero
+        command: bash -c "/tmp/mc --config-dir /tmp mb aliasminio/velero"
       when: command_status.rc != 0
 
 - name: Create user
@@ -70,13 +70,13 @@
       kubernetes.core.k8s_exec:
         namespace: velero
         pod: "{{info_minio_app.resources[0].metadata.name}}"
-        command: /tmp/mc --config-dir /tmp admin user info aliasminio velero
+        command: bash -c "/tmp/mc --config-dir /tmp admin user info aliasminio velero"
       register: command_status
     - name: Create user Create
       kubernetes.core.k8s_exec:
         namespace: velero
         pod: "{{info_minio_app.resources[0].metadata.name}}"
-        command: "/tmp/mc --config-dir /tmp admin user add aliasminio velero {{var_rnd_password}}"
+        command: bash -c "/tmp/mc --config-dir /tmp admin user add aliasminio velero {{var_rnd_password}}"
       when: command_status.rc != 0
 
 - name: Create policy
@@ -87,7 +87,7 @@
       kubernetes.core.k8s_exec:
         namespace: velero
         pod: "{{info_minio_app.resources[0].metadata.name}}"
-        command: /tmp/mc --config-dir /tmp admin policy info aliasminio readwrite-velero
+        command: bash -c "/tmp/mc --config-dir /tmp admin policy info aliasminio readwrite-velero"
       register: command_status
     - name: Create policy Copy
       kubernetes.core.k8s_cp:
@@ -100,11 +100,11 @@
       kubernetes.core.k8s_exec:
         namespace: velero
         pod: "{{info_minio_app.resources[0].metadata.name}}"
-        command: /tmp/mc --config-dir /tmp admin policy create aliasminio readwrite-velero /tmp/readwrite-velero.json
+        command: bash -c "/tmp/mc --config-dir /tmp admin policy create aliasminio readwrite-velero /tmp/readwrite-velero.json"
       when: command_status.rc != 0
     - name: Create policy Attach
       kubernetes.core.k8s_exec:
         namespace: velero
         pod: "{{info_minio_app.resources[0].metadata.name}}"
-        command: /tmp/mc --config-dir /tmp admin policy attach aliasminio readwrite-velero --user velero
+        command: bash -c "/tmp/mc --config-dir /tmp admin policy attach aliasminio readwrite-velero --user velero"
       when: command_status.rc != 0
